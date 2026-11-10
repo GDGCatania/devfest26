@@ -1,0 +1,12 @@
+/tools/checker/
+/devfest26-checker/
+/check
+/check.exe
+/check-*.zip
+/pause
+/pause.exe
+/squeeze
+/squeeze.exe
+/paperclips/paperclips
+/paperclips/paperclips.exe
+/__pycache__/
