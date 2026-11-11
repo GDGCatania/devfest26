@@ -36,6 +36,15 @@ Dalla **root del progetto**, ad esempio su macOS ARM64:
 ./bin/macos-arm64/check
 ```
 
+Su **Windows x64**, apri PowerShell dalla root del progetto ed esegui questi comandi:
+
+```powershell
+.\bin\windows-amd64\check.exe doctor
+.\bin\windows-amd64\check.exe
+```
+
+Se `doctor` segnala strumenti mancanti, consulta il [setup manuale su Windows](docs/checker.md#setup-manuale-su-windows).
+
 Per tutte le informazioni sul checker, ti invitiamo a leggere la [guida, altre build e limiti](docs/checker.md).
 
 Ricorda, un `PASS` per una singola prova non basta per ottenere il premio.
