@@ -21,7 +21,7 @@ Ah, ovviamente hai tempo fino alla fine della durata della DevFest.
 
 ## Come partecipare?
 
-Clona questo repository o scaricane il `.zip`, poi modifica soltanto i quattro sorgenti delle prove, esegui il binario **check** contenuto in `/bin` e mostra il risultato completo allo staff.
+Clona questo repository o scaricane il `.zip`, poi modifica soltanto i quattro sorgenti delle prove, esegui il binario **check** contenuto in `bin/` e mostra il risultato completo allo staff.
 
 ## Checker!
 

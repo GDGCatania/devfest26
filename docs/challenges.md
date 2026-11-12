@@ -1,7 +1,7 @@
 # Specifiche delle prove
 
 Le prove leggono da stdin e scrivono su stdout: JSON per Python e Go, testo
-per C++. Usa solo librerie standard e mantieni invariati nomi, firme e formati. Non serve stampare messaggi aggiuntivi su stdout. 
+per C++. Usa solo librerie standard e mantieni invariati nomi, firme e formati. Non stampare messaggi aggiuntivi su stdout.
 
 A seguire una descrizione di ciascuna.
 
@@ -79,7 +79,7 @@ I tempi vanno da $-10^{6}$ a $2 \cdot 10^{6}$, con `start <= end`.
 
 Ogni evento ha una categoria e un costo. In `squeeze.cpp` cerchi la
 sequenza più lunga di eventi consecutivi, senza saltarne nessuno, con al massimo `limit` categorie distinte e costo totale entro il budget `budget`.
-Tutti i costi contano nella somma, che può superare i 32 bit.
+La somma dei costi può superare il massimo rappresentabile da un intero a 32 bit.
 
 Tra sequenze della stessa lunghezza scegli quella che costa meno.
 
