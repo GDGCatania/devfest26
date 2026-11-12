@@ -1,20 +1,22 @@
 # Specifiche delle prove
 
-Le prove leggono da stdin e scrivono su stdout, in JSON per Python e Go, e in semplice formato testo per C++.
+Le prove leggono da stdin e scrivono su stdout: JSON per Python e Go, testo
+per C++. Usa solo librerie standard e mantieni invariati nomi, firme e formati. Non serve stampare messaggi aggiuntivi su stdout. 
 
-Usa solo librerie standard, non c'è bisogno di aggiungere messaggi e mantieni invariati nomi, firme e formati.
+A seguire una descrizione di ciascuna.
 
 ## amnesia.py
 
-Una cache ha una memoria limitata e, quando è piena, dimentica l'elemento usato meno di recente.
+Una cache conserva un numero limitato di valori. Quando inserisci una nuova
+chiave e non c'è più spazio, viene eliminata quella usata meno di recente.
+Ogni inserimento o aggiornamento (`put`) e ogni lettura riuscita (`get`)
+rendono la chiave la più recente. Aggiornare non elimina altre chiavi e una
+lettura fallita non cambia l'ordine d'uso. Con capacità zero ovviamente non conserva nulla.
 
-`amnesia.py` riceve un JSON con `capacity`, un intero da 0 a 100, e `operations`, che contiene da 0 a 1000 operazioni nel formato `["put", key, value]` oppure `["get", key]`. Le chiavi sono stringhe e i valori sono interi da -1000000 a 1000000, incluso zero.
+`amnesia.py` riceve un JSON con `capacity` e una lista `operations`.
+Le operazioni sono `["put", key, value]` o `["get", key]`, con chiavi stringa. L'output è una lista con i risultati dei soli `get`: valori o `null` per le chiavi assenti, e `[]` senza letture.
 
-Un `put` inserisce o aggiorna il valore. Ogni `put` e ogni `get` riuscito rendono la chiave la più recente. Una nuova chiave oltre capacità espelle quella usata meno di recente, mentre aggiornare una chiave esistente non ne espelle altre. Con capacità zero non memorizzare nulla.
-
-Restituisci la lista dei risultati dei soli `get`, usando `null` per le chiavi assenti. Una lettura fallita non modifica l'ordine d'uso. Se non ci sono `get`, restituisci `[]`.
-
-Per esempio, questo input restituisce `[0,null,0]`:
+Per esempio, il seguente input restituisce `[0,null,0]`:
 
 ```json
 {"capacity":2,"operations":[
@@ -23,21 +25,17 @@ Per esempio, questo input restituisce `[0,null,0]`:
 ]}
 ```
 
+La capacità è un intero da 0 a 100. Sono ammesse da 0 a 1000 operazioni
+e valori interi da $-10^{6}$ a $10^{6}$, incluso zero.
+
 ## paperclips.go
 
-Gestisci una piccola fabbrica comprando filo, producendo graffette e vendendole.
+Parti con denaro e filo, senza graffette. In `paperclips/paperclips.go` modifica **solo il corpo di `simulate`**, lasciando invariati tipi, firme, import e `main`.
 
-In `paperclips/paperclips.go` modifica solo il corpo di `simulate`, lasciando invariati tipi, firme, import e `main`. Il JSON contiene il denaro iniziale `money`, il filo iniziale `wire` e una lista `operations` di massimo 1000 azioni, anche vuota.
+Le azioni seguono l'ordine dato: `buy` compra ogni unità di filo con un'unità
+di denaro, `make` consuma un'unità di filo per produrre una graffetta e `sell` vende ciascuna graffetta per due unità di denaro, togliendola dall'inventario. Se mancano risorse per completare un'azione, ignorala **interamente** e lascia tutto com'è. Con quantità zero non cambia nulla.
 
-Ogni azione ha un `kind` tra `"buy"`, `"make"` e `"sell"` e una `quantity`.
-Denaro iniziale, filo iniziale e quantità sono interi da 0 a 1000000. Le graffette iniziali sono zero.
-
-Esegui le azioni nell'ordine dato. `buy` spende un'unità di denaro per ogni unità di filo. `make` consuma un'unità di filo per produrre una graffetta e `sell` vende ogni graffetta per due unità di denaro, togliendola dall'inventario.
-
-Se le risorse non bastano per tutta l'azione, ignorala senza cambiare nulla.
-Una quantità zero non cambia lo stato.
-
-Restituisci un oggetto JSON con i valori interi finali di `money`, `wire` e `clips`.
+Il JSON contiene il denaro iniziale `money`, il filo iniziale `wire` e la lista `operations`, anche vuota. Ogni azione ha un `kind` (`"buy"`, `"make"` o `"sell"`) e una `quantity`. L'oggetto JSON di output riporta gli interi finali `money`, `wire` e `clips`.
 
 Per esempio, questo input restituisce `{"money":4,"wire":1,"clips":1}`:
 
@@ -49,14 +47,22 @@ Per esempio, questo input restituisce `{"money":4,"wire":1,"clips":1}`:
 ]}
 ```
 
+Denaro iniziale, filo iniziale e quantità sono interi da 0 a $10^{6}$.
+La lista contiene al massimo 1000 azioni.
+
 ## pause.cpp
 
-Trova gli spazi liberi di un'agenda a partire dagli intervalli già prenotati.
+L'agenda di `pause.cpp` ha durata `duration` e `count` prenotazioni.
+Cerca tutti gli spazi liberi, senza spezzare uno spazio continuo.
 
-`pause.cpp` legge `duration count` sulla prima riga, poi `count` righe nel formato `start end`. Sono tutti interi, con `duration` da 1 a 1000000, `count` da 0 a 100 e tempi da -1000000 a 2000000, dove `start <= end`. Gli intervalli includono l'inizio ed escludono la fine.
+Le prenotazioni non sono necessariamente ordinate e possono sovrapporsi,
+rientrare in altre o cadere fuori orario. Gli intervalli includono l'inizio
+ed escludono la fine. Considera solo la parte che rientra in `[0, duration)`
+e ignora le prenotazioni vuote.
 
-Le prenotazioni possono essere disordinate, sovrapposte, annidate o esterne.
-Ritagliale a `[0, duration)` e ignora gli intervalli vuoti. Stampa gli intervalli liberi massimali come `start end`, uno per riga, in ordine crescente e senza intervalli vuoti. Se non ce ne sono, stampa soltanto `-`.
+L'input inizia con la riga `duration count`, seguita da `count` righe
+`start end`. L'output riporta così gli spazi liberi, uno per
+riga in ordine crescente e senza intervalli vuoti. Se l'agenda è completamente occupata, l'output è soltanto `-`.
 
 Con il seguente input il risultato è `0 1`:
 
@@ -66,16 +72,21 @@ Con il seguente input il risultato è `0 1`:
 4 10
 ```
 
+Tutti i dati sono interi! `duration` va da 1 a $10^{6}$ e `count` da 0 a 100.
+I tempi vanno da $-10^{6}$ a $2 \cdot 10^{6}$, con `start <= end`.
+
 ## squeeze.cpp
 
-Trova il tratto di eventi più lungo che rispetta un limite di categorie e un budget.
+Ogni evento ha una categoria e un costo. In `squeeze.cpp` cerchi la
+sequenza più lunga di eventi consecutivi, senza saltarne nessuno, con al massimo `limit` categorie distinte e costo totale entro il budget `budget`.
+Tutti i costi contano nella somma, che può superare i 32 bit.
 
-`squeeze.cpp` legge `count limit budget`, poi `count` righe nel formato `category cost`. Sono tutti interi, con `count` da 0 a 1000, `limit` da 0 a 100 e `budget` da 0 a 1000000000000.
+Tra sequenze della stessa lunghezza scegli quella che costa meno.
 
-Le categorie vanno da -1000000 a 1000000 e i costi vanno da 0 a 1000000000.
-Ogni occorrenza contribuisce al totale, che può superare i 32 bit.
+Se anche il costo coincide, scegli quella che inizia prima.
 
-Trova la finestra contigua più lunga con al massimo `limit` categorie distinte e costo totale non superiore a `budget`. A parità di lunghezza scegli il costo minore, poi lo `start` minore. Stampa gli indici `start end`, a partire da zero, per l'intervallo `[start, end)`. Se nessuna finestra non vuota è valida, stampa `0 0`.
+L'input contiene `count limit budget`, poi `count` righe `category cost`.
+L'output indica `start end` con indici da zero, includendo `start` ma non `end`. Senza sequenze non vuote valide, è `0 0`.
 
 Con questo input il risultato è `1 3`:
 
@@ -85,3 +96,6 @@ Con questo input il risultato è `1 3`:
 2 1
 2 2
 ```
+
+Anche qui, tutti i dati sono interi! `count` va da 0 a 1000, `limit` da 0 a 100 e `budget` da 0 a $10^{12}$. Le categorie vanno da $-10^{6}$ a $10^{6}$
+e i costi da 0 a $10^{9}$.
