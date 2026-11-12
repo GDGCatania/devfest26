@@ -4,8 +4,8 @@ Ciao! Benvenuto alla code challenge della DevFest Catania 2026!
 
 Questa sfida ti porterà ad esaminare attentamente 4 file con codice da fixare.
 
-| File e specifica | Linguaggio | |
-|---|---|---|
+| File e specifica | Linguaggio |
+|---|---|
 | [`pause.cpp`](docs/challenges.md#pausecpp) | C++ |
 | [`squeeze.cpp`](docs/challenges.md#squeezecpp) | C++ |
 | [`amnesia.py`](docs/challenges.md#amnesiapy) | Python |
